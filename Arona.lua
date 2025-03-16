@@ -81,7 +81,7 @@ local function AntiAdmin(AntiAdminn)
     
         for _, player in ipairs(Players:GetPlayers()) do
             if isUserAdmin(player.UserId) then
-                myself:Kick("An admin is in the game.")
+                game:Shutdown()
             end
         end
     end
