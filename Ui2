@@ -543,8 +543,8 @@ function library:CreateWindow(WName)
 	end
 	pcall(function()
 		game:GetService("StarterGui"):SetCore("SendNotification", {
-        	Title = "Made By BigSpoon",
-        	Text = "For Voxisaqt and BigSpoon",
+        	Title = "Arona",
+        	Text = "Made by BigSpoon and Vox",
         	Duration = 5
    	 	})
 	end)
