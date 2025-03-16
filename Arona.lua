@@ -1,10 +1,9 @@
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Rain-Design/Libraries/main/Shaman/Library.lua'))()
-local Flags = Library.Flags
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/youngstar"))();
 local myself = game.Players.LocalPlayer
 local character = myself.Character or myself.CharacterAdded:Wait()
-local Players = game:GetService("Players")
 local workspace = game:GetService("Workspace")
 local consumableSpawns = workspace:WaitForChild("ConsumableSpawns")
+local Players = game:GetService("Players")
 local delay = 0.45
 local AutoGems = false
 local AutoBoss = false
@@ -35,33 +34,6 @@ local AdminIds = {
     91543795
 }
 
-local function AutoGems(AutoGemss)
-    AutoGems = AutoGemss
-    while AutoGems do
-        wait(1)
-        local ping = math.round(myself:GetNetworkPing() * 1000)
-        if ping > 2000 then
-            delay = 10
-        elseif ping > 400 then
-            delay = 2
-        else
-            delay = 0.45
-        end
-    
-        for _, meshpart in pairs(workspace:GetDescendants()) do
-            if meshpart:IsA("MeshPart") and (meshpart.Name == "GemModel" or meshpart.Name == "BigGemModel") and meshpart.Transparency == 0 and AutoGems == true then
-                wait(delay)
-                meshpart.CFrame = character.HumanoidRootPart.CFrame
-                meshpart.Transparency = 1
-            end
-        end
-    end    
-end
-
-local function AutoBoss(AutoBoss)
-
-end
-
 local function isUserAdmin(userId)
     for _, adminId in ipairs(AdminIds) do
         if userId == adminId then
@@ -71,10 +43,51 @@ local function isUserAdmin(userId)
     return false
 end
 
-local function AntiAdmin(AntiAdminn)
-    AntiAdmin = AntiAdminn
-    while AntiAdmin do 
-        wait(1)
+local Window = library:CreateWindow("Arona");
+
+Window:Toggle("AutoGems",function(v)
+     AutoGems = v;
+end);
+
+Window:Toggle("AutoBoss",function(v)
+    AutoBoss = v;
+end);
+
+Window:Toggle("AntiAdmin",function(v)
+    AntiAdmin = v;
+end);
+-- AutoGems Function
+spawn(function()
+    while wait(1) do
+        if AutoGems then
+           local ping = math.round(myself:GetNetworkPing() * 1000)
+           if ping > 2000 then
+              delay = 10
+           elseif ping > 400 then
+              delay = 2
+           else
+              delay = 0.45
+           end
+    
+        for _, meshpart in pairs(workspace:GetDescendants()) do
+             if meshpart:IsA("MeshPart") and (meshpart.Name == "GemModel" or meshpart.Name == "BigGemModel") and meshpart.Transparency == 0 and AutoGems == true then
+                wait(delay)
+                meshpart.CFrame = character.HumanoidRootPart.CFrame
+                meshpart.Transparency = 1
+             end
+          end
+       end
+    end
+end);
+--AutoBoss Function
+spawn(function()
+    while wait(1) do
+        
+    end
+end);
+--AntiAdmin Function
+spawn(function()
+    while wait(1) do
         if not myself then
             return
         end
@@ -85,66 +98,4 @@ local function AntiAdmin(AntiAdminn)
             end
         end
     end
-end
-
-local Window = Library:Window({
-    Text = "Arona"
-})
-
-local Tab = Window:Tab({
-    Text = "Main"
-})
-
-local Section = Tab:Section({
-    Text = "AutoFarms"
-})
-
-
-Section:Toggle({
-    Text = "AutoGems",
-    Callback = function(v)
-        if v == true then 
-            print("AutoGems Enabled")
-            AutoGems(true)
-        elseif v == false then 
-            print("AutoGems Disabled")
-            AutoGems = false
-        end
-    end
-})
-
-Section:Toggle({
-    Text = "AutoBoss",
-    Callback = function(v)
-        if v == true then 
-            print("AutoBoss Enabled")
-            AutoBoss(true)
-        elseif v == false then 
-            print("AutoBoss Disabled")
-            AutoBoss = false
-        end
-    end
-})
-
-Section:Toggle({
-    Text = "AntiAdmin",
-    Callback = function(v)
-        if v == true then 
-            print("AntiAdmin Enabled")
-            AntiAdmin(true)
-        elseif v == false then 
-            print("AntiAdmin Disabled")
-            AntiAdmin = false
-        end
-    end
-})
-
-Section:Slider({
-    Text = "GemPickUpDelay",
-    Default = 0.45,
-    Minimum = 0.1,
-    Maximum = 1,
-    Callback = function(v)
-        delay = v
-    end
-})
+end);
