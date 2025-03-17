@@ -159,7 +159,7 @@ spawn(function()
             end
      
          for _, meshpart in pairs(workspace:GetDescendants()) do
-              if meshpart:IsA("MeshPart") and (meshpart.Name == "ShamrocksModel") and meshpart.Transparency == 0 and AutoShamrocks == true then
+              if meshpart:IsA("MeshPart") and (meshpart.Name == "ShamrocksModel" or meshpart.Name == "BigShamrockModel") and meshpart.Transparency == 0 and AutoShamrocks == true then
                  wait(delay)
                  meshpart.CFrame = character.HumanoidRootPart.CFrame
                  meshpart.Transparency = 1
