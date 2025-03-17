@@ -1,11 +1,15 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Weave-Keys/jmdik/refs/heads/main/Ui2"))();
+local Players = game:GetService("Players")
 local myself = game.Players.LocalPlayer
 local character = myself.Character or myself.CharacterAdded:Wait()
 local workspace = game:GetService("Workspace")
 local consumableSpawns = workspace:WaitForChild("ConsumableSpawns")
 local bossModels = workspace.BossModels:GetChildren()
 local GiveawayM =  myself.PlayerGui.UI.ItemLauncherFrame.ItemLauncher
-local Players = game:GetService("Players")
+local MinerPetInv = myself.PlayerGui.UI.MinerPetInventory
+local PowerShop = myself.PlayerGui.UI.PowerShop
+local InvestigationFrame = myself.PlayerGui.UI.InvestigationFrame
+local FusionFrame = myself.PlayerGui.UI.FusionFrame
 local delay = 0.45
 local AutoGems = false
 local AutoBoss = false
@@ -45,7 +49,7 @@ local function isUserAdmin(userId)
     return false
 end
 
-local Window = library:CreateWindow("Arona-Private");
+local Window = library:CreateWindow("Arona-AutoFarms");
 local Window2 = library:CreateWindow("Arona-Misc");
 
 Window:Toggle("AutoGems",function(v)
@@ -62,6 +66,22 @@ end);
 
 Window2:Toggle("Show Giveaway Menu",function(v)
     GiveawayM.Visible = v;
+end);
+
+Window2:Toggle("Show MinerPetInventory",function(v)
+    MinerPetInv.Visible = v;
+end);
+
+Window2:Toggle("Show PowerShop",function(v)
+    PowerShop.Visible = v;
+end);
+
+Window2:Toggle("Show Investigation Menu",function(v)
+    InvestigationFrame.Visible = v;
+end);
+
+Window2:Toggle("Show Fusion Menu",function(v)
+    FusionFrame.Visible = v;
 end);
 
 -- AutoGems Function
