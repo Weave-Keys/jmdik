@@ -12,6 +12,7 @@ local InvestigationFrame = myself.PlayerGui.UI.InvestigationFrame
 local FusionFrame = myself.PlayerGui.UI.FusionFrame
 local delay = 0.45
 local AutoGems = false
+local AutoShamrocks = false
 local AutoBoss = false
 local AntiAdmin = false
 local AdminIds = {
@@ -49,11 +50,15 @@ local function isUserAdmin(userId)
     return false
 end
 
-local Window = library:CreateWindow("Arona-AutoFarms");
+local Window = library:CreateWindow("Arona-Private");
 local Window2 = library:CreateWindow("Arona-Misc");
 
 Window:Toggle("AutoGems",function(v)
      AutoGems = v;
+end);
+
+Window:Toggle("AutoShamrocks",function(v)
+    AutoShamrocks = v;
 end);
 
 Window:Toggle("AutoBoss",function(v)
@@ -83,7 +88,6 @@ end);
 Window2:Toggle("Show Fusion Menu",function(v)
     FusionFrame.Visible = v;
 end);
-
 -- AutoGems Function
 spawn(function()
     while wait(1) do
@@ -138,6 +142,29 @@ spawn(function()
                     game:Shutdown()
                 end
             end 
+        end
+    end
+end);
+
+spawn(function()
+    while wait(1) do
+        if AutoShamrocks then
+            local ping = math.round(myself:GetNetworkPing() * 1000)
+            if ping > 2000 then
+               delay = 10
+            elseif ping > 400 then
+               delay = 2
+            else
+               delay = 0.45
+            end
+     
+         for _, meshpart in pairs(workspace:GetDescendants()) do
+              if meshpart:IsA("MeshPart") and (meshpart.Name == "ShamrocksModel") and meshpart.Transparency == 0 and AutoShamrocks == true then
+                 wait(delay)
+                 meshpart.CFrame = character.HumanoidRootPart.CFrame
+                 meshpart.Transparency = 1
+              end
+           end
         end
     end
 end);
