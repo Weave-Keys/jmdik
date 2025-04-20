@@ -1,10 +1,10 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Weave-Keys/jmdik/refs/heads/main/Ui2"))();
 local Players = game:GetService("Players")
-local myself = game.Players.LocalPlayer
-local character = myself.Character or myself.CharacterAdded:Wait()
 local workspace = game:GetService("Workspace")
 local consumableSpawns = workspace:WaitForChild("ConsumableSpawns")
 local bossModels = workspace.BossModels:GetChildren()
+local myself = game.Players.LocalPlayer
+local character = myself.Character or myself.CharacterAdded:Wait()
 local GiveawayM =  myself.PlayerGui.UI.ItemLauncherFrame.ItemLauncher
 local MinerPetInv = myself.PlayerGui.UI.MinerPetInventory
 local PowerShop = myself.PlayerGui.UI.PowerShop
@@ -14,6 +14,7 @@ local delay = 0.45
 local AutoGems = false
 local AutoShamrocks = false
 local AutoBoss = false
+local AutoAirDrop = false
 local AntiAdmin = false
 local AdminIds = {
     1669099177,
@@ -50,7 +51,7 @@ local function isUserAdmin(userId)
     return false
 end
 
-local Window = library:CreateWindow("Arona-Private");
+local Window = library:CreateWindow("Arona-AutoFarms");
 local Window2 = library:CreateWindow("Arona-Misc");
 
 Window:Toggle("AutoGems",function(v)
@@ -61,8 +62,8 @@ Window:Toggle("AutoShamrocks",function(v)
     AutoShamrocks = v;
 end);
 
-Window:Toggle("AutoBoss",function(v)
-    AutoBoss = v;
+Window:Toggle("AutoAirDrop",function(v)
+    AutoAirDrop = v;
 end);
 
 Window:Toggle("AntiAdmin",function(v)
@@ -111,24 +112,6 @@ spawn(function()
        end
     end
 end);
---AutoBoss Function
-spawn(function()
-    while wait(1) do
-        if AutoBoss then
-            for _, boss in ipairs(bossModels) do
-                if boss.Name ~= "CupidsFire" and boss:FindFirstChild("Head") and boss:FindFirstChild("HitsLeft") and AutoBoss == true then
-                    -- Loop teleport to the boss until HitsLeft is 0
-                    local hitsLeft = boss.HitsLeft
-                    while hitsLeft.Value > 0 and AutoBoss == true do
-                        -- Teleport to the boss's position
-                        character:MoveTo(boss.LeftLowerLeg.Position)
-                        wait(0.05) -- Wait briefly between teleports
-                    end
-                end
-            end
-        end 
-    end
-end);
 --AntiAdmin Function
 spawn(function()
     while wait(1) do
@@ -165,6 +148,48 @@ spawn(function()
                  meshpart.Transparency = 1
               end
            end
+        end
+    end
+end);
+spawn(function()
+    while wait(1) do
+        if AutoAirDrop then
+            -- Save the current player location at the moment AutoAirDrop is enabled
+            local lastLocation = character.HumanoidRootPart.CFrame
+            
+            -- Loop to continuously check for an airdrop while AutoAirDrop remains true
+            while AutoAirDrop do
+                -- Check if the Airdrops folder exists
+                local airdropFolder = workspace:FindFirstChild("Airdrops")
+                if airdropFolder then
+                    -- Look for the Airdrop model inside the folder
+                    local airdropModel = airdropFolder:FindFirstChild("Airdrop")
+                    if airdropModel then
+                        -- Ensure the airdrop model has a PrimaryPart; if not, try to set one
+                        if not airdropModel.PrimaryPart then
+                            local primaryPart = airdropModel:FindFirstChildWhichIsA("BasePart")
+                            if primaryPart then
+                                airdropModel.PrimaryPart = primaryPart
+                            end
+                        end
+                        
+                        if airdropModel.PrimaryPart then
+                            -- Teleport the player to the airdrop's position
+                            character.HumanoidRootPart.CFrame = airdropModel.PrimaryPart.CFrame
+                            
+                            -- Wait 10 seconds to allow time for looting/interaction
+                            wait(7)
+                            
+                            -- Teleport the player back to their last saved location
+                            character.HumanoidRootPart.CFrame = lastLocation
+                            
+                            -- Optionally, wait a few seconds before scanning again
+                            wait(0.5)
+                        end
+                    end
+                end
+                wait(0.5)
+            end
         end
     end
 end);
